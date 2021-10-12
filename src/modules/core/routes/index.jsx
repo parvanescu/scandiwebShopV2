@@ -3,27 +3,34 @@ import {Redirect, Route, Switch} from "react-router-dom"
 import Category from "../../modules/category/pages/Category";
 import Product from "../../modules/product/pages/Product";
 import Cart from "../../modules/cart/pages/Cart";
+import Layout from "../../modules/Layout";
 
-class Routes extends Component{
+class Routes extends Component {
 
 
     render() {
 
         return (
-                <Switch>
-                    <Route path="/" exact>
-                        <Redirect to={"/category"}/>
-                    </Route>
-                    <Route path="/category" exact>
+            <Switch>
+                <Route path="/" exact>
+                    <Redirect to={"/category"}/>
+                </Route>
+                <Route path="/category" exact>
+                    <Layout>
                         <Category/>
-                    </Route>
-                    <Route path="/product/:id" exact>
+                    </Layout>
+                </Route>
+                <Route path="/product/:id" exact>
+                    <Layout>
                         <Product/>
-                    </Route>
-                    <Route path="/cart" exact>
+                    </Layout>
+                </Route>
+                <Route path="/cart" exact>
+                    <Layout>
                         <Cart/>
-                    </Route>
-                </Switch>
+                    </Layout>
+                </Route>
+            </Switch>
         )
 
     }
