@@ -5,8 +5,8 @@ import Product from "../../modules/product/pages/Product";
 import Cart from "../../modules/cart/pages/Cart";
 import Layout from "../../modules/Layout";
 
-class Routes extends Component {
 
+class Routes extends Component {
 
     render() {
 

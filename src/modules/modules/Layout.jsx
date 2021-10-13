@@ -5,20 +5,12 @@ import PageContent from "../core/ui/layout-content/PageContent";
 
 
 class Layout extends Component{
-    componentDidMount() {
-        console.log(this.props.children)
-    }
-
 
     render() {
 
         return(
             <CenteredContent>
-                <Navbar>
-                    <h1>Categories</h1>
-                    <h1>Icon</h1>
-                    <h1>Cart</h1>
-                </Navbar>
+                <Navbar/>
                 <PageContent>
                     {this.props.children}
                 </PageContent>
