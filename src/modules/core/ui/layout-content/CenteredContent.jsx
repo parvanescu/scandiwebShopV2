@@ -8,6 +8,14 @@ const CenteredContent = styled.div`
   padding-right: 100px;
   display: flex;
   flex-direction: column;
+  
+  label,p{
+    font-family: Raleway,serif;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 120%;
+    color: #1d1d22;
+  }
 `
 
 export default CenteredContent;

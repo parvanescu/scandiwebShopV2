@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom"
-import Category from "../../modules/category/pages/Category";
+import Category from "../../modules/category/Layout";
 import Product from "../../modules/product/pages/Product";
 import Cart from "../../modules/cart/pages/Cart";
 import Layout from "../../modules/Layout";
 
-class Routes extends Component {
 
+class Routes extends Component {
 
     render() {
 
@@ -35,6 +35,5 @@ class Routes extends Component {
 
     }
 }
-
 
 export default Routes;
