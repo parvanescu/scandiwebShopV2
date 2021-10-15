@@ -6,6 +6,7 @@ export const NavbarUI = styled.div`
   width: calc(100vw - 200px);
   justify-content: space-between;
   position: absolute;
+  z-index: 100;
 `
 
 export const NavigationCategories = styled.div`
