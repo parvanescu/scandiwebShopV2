@@ -3,7 +3,7 @@ import styled, {css} from "styled-components";
 export const NavbarUI = styled.div`
   height: 80px;
   display: flex;
-  width: calc(100vw - 200px);
+  width: calc(100vw - 2 * 100vw *0.069375 + 0.2px);
   justify-content: space-between;
   position: absolute;
   z-index: 100;
