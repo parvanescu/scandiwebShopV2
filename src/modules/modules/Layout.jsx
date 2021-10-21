@@ -32,14 +32,16 @@ class Layout extends Component {
     render() {
 
         return (
-            <CenteredContent>
-                {this.state.loading && <MessageOverlay/>}
-                {this.state.error && <MessageOverlay message={this.state.error.message}/>}
-                            <Navbar/>
-                            <PageContent>
-                                {this.props.children}
-                            </PageContent>
-            </CenteredContent>
+            <div style={{width: "100%"}}>
+                <CenteredContent>
+                    {this.state.loading && <MessageOverlay/>}
+                    {this.state.error && <MessageOverlay message={this.state.error.message}/>}
+                    <Navbar/>
+                    <PageContent>
+                        {this.props.children}
+                    </PageContent>
+                </CenteredContent>
+            </div>
         )
     }
 }

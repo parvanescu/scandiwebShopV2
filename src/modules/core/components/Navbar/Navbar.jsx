@@ -3,7 +3,7 @@ import {compose} from "@reduxjs/toolkit";
 import {graphql} from "@apollo/client/react/hoc";
 import {NavbarUI, NavigationActions, NavigationCategories, NavigationCategory} from "../../ui/navbar/NavbarUI";
 import logo from "../../../../assets/icons/logo.png"
-import cart from "../../../../assets/icons/empty_cart.png"
+import cart from "../../../../assets/icons/empty_cart_grey.png"
 import arrowDown from "../../../../assets/icons/arrow-down.png"
 import {
     ActionLogo,
@@ -95,10 +95,6 @@ class Navbar extends Component {
             if (!prevState.error) {
                 this.props.changeError(this.state.error)
             }
-        }
-
-        if(prevProps.currency !== this.props.currency){
-
         }
     }
 

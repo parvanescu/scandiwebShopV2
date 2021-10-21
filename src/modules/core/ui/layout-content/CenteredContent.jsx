@@ -10,7 +10,7 @@ const CenteredContent = styled.div`
   flex-direction: column;
   
   label,p{
-    font-family: Raleway,serif;
+    font-family: Raleway,sans-serif;
     font-style: normal;
     font-size: 16px;
     line-height: 120%;
