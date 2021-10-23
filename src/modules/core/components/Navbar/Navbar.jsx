@@ -17,6 +17,8 @@ import {setCategories, setCurrency, setError, setLoading} from "../../contexts/s
 import {getCategoriesState, getCurrencyState, getErrorState, getLoadingState} from "../../contexts/store/selectors";
 import {getCategoriesQuery, getCurrenciesQuery} from "./gql";
 import {mapCurrencyToSymbol} from "../../../../lib/utils";
+import CurrencyExchange from "../CurrencyExchange";
+import {withRouter} from "react-router-dom"
 
 
 class Navbar extends Component {
@@ -106,11 +108,16 @@ class Navbar extends Component {
                 <NavigationCategories>
                     {!loading && categories &&
                     categories.map((category, idx) => (
-                        <NavigationCategory key={idx} selected={idx === this.state.selected}
-                                            onClick={() => this.setState((prevState) => ({
-                                                ...prevState,
-                                                selected: idx
-                                            }))}>{category.name.toUpperCase()}</NavigationCategory>)
+                        <NavigationCategory
+                            key={idx}
+                            selected={idx === this.state.selected}
+                            onClick={() => {
+                                this.setState((prevState) => ({
+                                    ...prevState,
+                                    selected: idx
+                                }))
+                                this.props.history.push("/category")
+                            }}>{category.name.toUpperCase()}</NavigationCategory>)
                     )
                     }
                 </NavigationCategories>
@@ -122,9 +129,9 @@ class Navbar extends Component {
                         <CurrencyActionLogo>
                             {this.props.currency?.symbol}
                         </CurrencyActionLogo>
-                        <LogoWrapper>
-                            <ActionLogo src={arrowDown} width={6} height={3} pT/>
-                        </LogoWrapper>
+                        <CurrencyExchange
+                            currencies={this.state.currencies}
+                        />
                         <ActionLogo src={cart}/>
                     </CurrencyActionLogoWrapper>
                 </NavigationActions>
@@ -158,11 +165,11 @@ const mapDispatchToProps = dispatch => ({
     }
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(
     compose(
         graphql(getCategoriesQuery, {name: "getCategoryQuery"}),
         graphql(getCurrenciesQuery, {name: "getCurrenciesQuery"})
     )
     (Navbar)
-);
+));
 

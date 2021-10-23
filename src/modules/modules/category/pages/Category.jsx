@@ -15,7 +15,6 @@ class Category extends Component {
             category: props.category,
             products: [],
         }
-
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -25,10 +24,6 @@ class Category extends Component {
         }
         if (this.props.category !== undefined && !this.props.data.loading && data.category !== this.props.data.category) {
             this.setState(prevState => ({...prevState, products: this.props.data.category.products}))
-            this.props.data.category.products.forEach(product=>{
-                console.log(this.props.currency);
-                console.log(product.prices.filter(price=>price.currency === this.props.currency.label)[0])
-            })
         }
     }
 
@@ -38,9 +33,10 @@ class Category extends Component {
             <div>
                 {this.state.products.length === 0 ? <Loader/> :
                     <ProductsLayout>
-                        {/*{this.state.products.map(product => <h1>{JSON.stringify(product)}</h1>)}*/}
                         {this.state.products.map((product,idx) => (
                             <ProductCard
+                                key={`product-card-${idx}`}
+                                id={product.id}
                                 inStock={product.inStock}
                                 pR={(idx+1)%4!==0}
                                 image={product.gallery[0]}

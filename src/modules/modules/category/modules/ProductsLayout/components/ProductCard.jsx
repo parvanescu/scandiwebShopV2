@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {mapCurrencyToSymbol} from "../../../../../../lib/utils";
 import OutOfStock from "./OutOfStock";
 import BuyNow from "../../../../../core/ui/BuyNow";
+import {withRouter} from "react-router-dom";
 
 
 const ProductCardWrapper = styled.div`
@@ -65,10 +66,14 @@ class ProductCard extends Component{
 
     }
 
+    redirectTo(productId){
+        this.props.history.push(`/product/${productId}`);
+    }
+
 
     render() {
         return (
-            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL}>
+            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL} onClick={()=>this.redirectTo(this.props.id)}>
                 <ProductCardWrapper>
                     <ProductImageWrapper>
                         <ProductImage src={this.props.image}/>
@@ -87,4 +92,4 @@ const mapStateToProps = state => (
     {currency: getCurrencyState(state)}
 )
 
-export default connect(mapStateToProps)(ProductCard)
+export default withRouter(connect(mapStateToProps)(ProductCard));
