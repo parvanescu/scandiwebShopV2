@@ -82,7 +82,7 @@ class ProductCard extends Component{
                     <ProductName>{this.props.name}</ProductName>
                     <ProductValue>{mapCurrencyToSymbol(this.props.value.currency)+this.props.value.amount}</ProductValue>
                 </ProductCardWrapper>
-                {this.props.inStock && <OutOfStock/>}
+                {!this.props.inStock && <OutOfStock/>}
             </ProductCardHorizontalAlign>
         );
     }
