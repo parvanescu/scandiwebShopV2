@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Redirect, Route, Switch} from "react-router-dom"
 import Category from "../../modules/category/Layout";
 import Product from "../../modules/product/Layout";
-import Cart from "../../modules/cart/pages/Cart";
+import Cart from "../../modules/cart/Layout";
 import Layout from "../../modules/Layout";
 
 
