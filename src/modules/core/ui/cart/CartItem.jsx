@@ -116,8 +116,8 @@ export const CartButton = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 43px;
-  height: 43px;
+  width: ${props=>props.width-2}px;
+  height: ${props=>props.width-2}px;
   border: 1px solid #1D1F22;
   p{
     margin: 0;

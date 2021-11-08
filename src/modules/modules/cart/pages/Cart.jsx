@@ -15,9 +15,6 @@ class Cart extends Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if(prevProps.items !== this.props.items){
             this.setState(prevState => ({...prevState,items:this.props.items}))
-            console.log("changed");
-            console.log(prevProps.items);
-            console.log(this.props.items);
         }
     }
 

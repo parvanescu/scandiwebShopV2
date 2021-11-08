@@ -63,14 +63,15 @@ const ProductValue = styled.p`
 
 class ProductCard extends Component{
 
-    redirectTo(productId){
+    redirectTo(e,productId){
+        e.stopPropagation();
         this.props.history.push(`/product/${productId}`);
     }
 
 
     render() {
         return (
-            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL} onClick={()=>this.redirectTo(this.props.id)}>
+            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL} onClick={(e)=>this.redirectTo(e,this.props.id)}>
                 <ProductCardWrapper className="product_card_wrapper" displayBuyNow={this.props.inStock} >
                     <ProductImageWrapper>
                         <ProductImage src={this.props.image}/>
