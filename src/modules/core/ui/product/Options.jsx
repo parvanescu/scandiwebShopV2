@@ -31,7 +31,7 @@ export const OptionsLayout = styled.div`
 
 export const Option = styled.div`
   width: 61px;
-  height: 45px;
+  height: 43px;
   border: 1px solid #A6A6A6;
   display: flex;
   flex-direction: column;
@@ -45,8 +45,8 @@ export const Option = styled.div`
   p{
     font-family: Source Sans Pro,sans-serif!important;
     font-weight: 400!important;
-    font-size: 16px;
-    line-height: 18px;
-    color: rgba(166,166,166,1);
+    font-size: 16px!important;
+    line-height: 18px!important;
+    color: rgba(29,31,34,1)!important;
   }
 `

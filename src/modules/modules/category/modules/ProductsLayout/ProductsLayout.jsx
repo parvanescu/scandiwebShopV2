@@ -6,4 +6,5 @@ export const ProductsLayout = styled.div`
   grid-row-gap: 100px;
   grid-template-columns: repeat(auto-fit,386px);
   grid-auto-flow: row;
+  margin-bottom: 191px;
 `;

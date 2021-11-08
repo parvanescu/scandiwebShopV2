@@ -14,7 +14,12 @@ class Category extends Component {
         this.state = {
             category: props.category,
             products: [],
+            checkLoading: false
         }
+    }
+
+    componentDidMount() {
+        this.setState(prevState => ({...prevState,checkLoading: true}));
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -24,6 +29,9 @@ class Category extends Component {
         }
         if (this.props.category !== undefined && !this.props.data.loading && data.category !== this.props.data.category) {
             this.setState(prevState => ({...prevState, products: this.props.data.category.products}))
+        }
+        if(prevState.checkLoading !== this.state.checkLoading && this.props.category !== undefined && !this.props.data.loading){
+            this.setState(prevState => ({...prevState,products:this.props.data.category.products}))
         }
     }
 
@@ -42,6 +50,7 @@ class Category extends Component {
                                 image={product.gallery[0]}
                                 name={product.name}
                                 value={product.prices.filter(price=>price.currency===this.props.currency.label)[0]}
+                                product={product}
                             />))}
                     </ProductsLayout>
                 }

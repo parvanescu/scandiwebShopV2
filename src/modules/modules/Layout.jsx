@@ -5,6 +5,7 @@ import PageContent from "../core/ui/layout-content/PageContent";
 import {connect} from "react-redux";
 import {getErrorState, getLoadingState} from "../core/contexts/store/selectors";
 import MessageOverlay from "../core/components/MessageOverlay";
+import {CartBackground} from "../core/ui/CartBackground";
 
 
 class Layout extends Component {
@@ -14,12 +15,13 @@ class Layout extends Component {
         this.state = {
             loading: props.loading,
             error: props.error,
+            showBackground: false
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {loading, error} = this.props;
-        if (prevProps.loading !== loading){
+        if (prevProps.loading !== loading) {
             this.setState(prevState => ({...prevState, loading: loading}))
         }
 
@@ -29,14 +31,24 @@ class Layout extends Component {
         }
     }
 
+    handleChangeBackground() {
+        this.setState(prevState => ({
+            ...prevState,
+            showBackground: !this.state.showBackground
+        }))
+    }
+
     render() {
 
         return (
-            <div style={{width: "100%"}}>
-                <CenteredContent>
+            <div style={{width: "100%", position: "relative"}}>
+                {this.state.showBackground && <CartBackground/>}
+                <CenteredContent ref={node => {
+                    this.node = node;
+                }}>
                     {this.state.loading && <MessageOverlay/>}
                     {this.state.error && <MessageOverlay message={this.state.error.message}/>}
-                    <Navbar/>
+                    <Navbar changeBackground={() => this.handleChangeBackground()} node={this.node}/>
                     <PageContent>
                         {this.props.children}
                     </PageContent>
@@ -50,4 +62,4 @@ const mapStateToProps = state => {
     return {loading: getLoadingState(state), error: getErrorState(state)};
 }
 
-export default connect(mapStateToProps,null)(Layout);
+export default connect(mapStateToProps, null)(Layout);

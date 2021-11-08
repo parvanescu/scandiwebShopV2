@@ -4,11 +4,6 @@ import {ChoiceWrapper, Option, OptionsLayout, Swatch} from "../../../../core/ui/
 
 class OptionsChoice extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
-
     render() {
         return (
             <ChoiceWrapper>

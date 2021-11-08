@@ -11,16 +11,18 @@ import styled, {css} from "styled-components";
 
 const ExchangeWrapper = styled.div`
   position: relative;
+  margin-left: 10px;
+  padding-top: 11.5px;
 `
 
 const ExchangeDropdown = styled.div`
   position: absolute;
-  ${props=> props.display === 'true'? css`display: flex`:css`display: none`};
+  ${props => props.display === 'true' ? css`display: flex` : css`display: none`};
   flex-direction: column;
   justify-content: center;
   width: 114px;
   box-shadow: 0 4px 35px 0 rgba(168, 172, 176, 0.19);
-  top: 17.5px;
+  top: 28.5px;
   left: -55px;
   padding: 20px;
 `
@@ -29,22 +31,22 @@ const ExchangeDropdownItem = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  ${props=> props.pB && css`
+
+  ${props => props.pB && css`
     padding-bottom: 21px;
   `}
-  
-  p{
+  p {
     color: rgba(29, 31, 34, 1);
-    font-style: normal!important;
-    font-weight: 500!important;
-    font-size: 18px!important;
-    line-height: 28.8px!important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    line-height: 28.8px !important;
     margin: 0;
     cursor: pointer;
   }
-  
-  &:hover{
-    p{
+
+  &:hover {
+    p {
       text-shadow: 2px 2px 5px rgba(168, 172, 176, 1);
     }
   }
@@ -70,19 +72,25 @@ class CurrencyExchange extends Component {
 
     render() {
         return (
-            <LogoWrapper>
                 <ExchangeWrapper>
-                    <ActionLogo src={this.state.toggled?arrowUp:arrowDown} width={6} height={3} pT onClick={()=>this.setState(prevState => ({...prevState,toggled: !this.state.toggled}))}/>
+                    <ActionLogo src={this.state.toggled ? arrowUp : arrowDown} width={6} height={3}
+                                onClick={() => this.setState(prevState => ({
+                                    ...prevState,
+                                    toggled: !this.state.toggled
+                                }))}/>
                     <ExchangeDropdown display={`${this.state.toggled}`}>
                         {this.props.currencies && this.props.currencies.map((currency, idx) => (
-                            <ExchangeDropdownItem key={`currency-${idx}`} pB={idx!==this.props.currencies.length-1} onClick={()=>this.props.changeCurrency(currency)}>
+                            <ExchangeDropdownItem key={`currency-${idx}`} pB={idx !== this.props.currencies.length - 1}
+                                                  onClick={() => {
+                                                      this.props.changeCurrency(currency)
+                                                      this.setState(prevState => ({...prevState,toggled: !this.state.toggled}))
+                                                  }}>
                                 <p>{currency.symbol}</p>
                                 <p>{currency.label}</p>
                             </ExchangeDropdownItem>
                         ))}
                     </ExchangeDropdown>
                 </ExchangeWrapper>
-            </LogoWrapper>
         );
     }
 }

@@ -5,6 +5,7 @@ import empty_cart from "../../../assets/icons/empty_cart.png"
 const BuyNowIcon = styled.img`
   width: 24px;
   height: 24px;
+  z-index: 200;
 `
 
 const BuyNowWrapper = styled.div`
@@ -32,7 +33,7 @@ const BuyNowVerticalAlign = styled.div`
 class BuyNow extends Component {
     render() {
         return (
-            <BuyNowWrapper className="buy_icon">
+            <BuyNowWrapper className="buy_icon" onClick={(e) => this.props.onClickCallback(e)}>
                 <BuyNowVerticalAlign><BuyNowIcon src={empty_cart}/></BuyNowVerticalAlign>
             </BuyNowWrapper>
         )
