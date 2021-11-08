@@ -4,6 +4,7 @@ import { getCurrencyState, getItemQuantityById} from "../contexts/store/selector
 import {connect} from "react-redux";
 import PlusMinusIcon from "../ui/icons/PlusMinusIcon";
 import { CartButton} from "../ui/cart/CartItem";
+import {updateItemQuantity} from "../contexts/store/actions";
 
 const MainContainer = styled.div`
   display: flex;
@@ -75,9 +76,13 @@ const InfoQuantityWrapper = styled.div`
 
 class CartDropdownItem extends Component {
 
-    constructor(props) {
-        super(props);
-        console.log(props.product)
+    handleChangeProduct(isPlus){
+        let newQuantity = this.props.itemQuantity(this.props.product.id)
+        if(isPlus)
+            newQuantity+=1
+        else
+            newQuantity-=1
+        this.props.updateItemQuantity(this.props.product.id,newQuantity)
     }
 
 
@@ -100,11 +105,11 @@ class CartDropdownItem extends Component {
                     </InfoWrapper>
                     <InfoQuantityWrapper>
                         <CartButton width={24} height={24}>
-                            <PlusMinusIcon isPlus width={22} height={22}/>
+                            <PlusMinusIcon isPlus width={22} height={22} onClickCallback={()=>this.handleChangeProduct(true)}/>
                         </CartButton>
                         <p>{this.props.itemQuantity(this.props.product.id)}</p>
                         <CartButton width={24} height={24}>
-                            <PlusMinusIcon width={22} height={22}/>
+                            <PlusMinusIcon width={22} height={22} onClickCallback={()=>this.handleChangeProduct(false)}/>
                         </CartButton>
                     </InfoQuantityWrapper>
                 </InfoContainer>
@@ -119,4 +124,8 @@ const mapStateToProps = (state) => ({
     itemQuantity: (id)=>getItemQuantityById(state,id)
 })
 
-export default connect(mapStateToProps)(CartDropdownItem);
+const mapDispatchToProps = (dispatch) => ({
+    updateItemQuantity: (id,quantity)=>dispatch(updateItemQuantity(id,quantity))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(CartDropdownItem);
