@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const OutOfStockContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.5);
+  padding-top: 16px;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -10,13 +11,14 @@ const OutOfStockContainer = styled.div`
   width: 354px;
   height: 330px;
   position: absolute;
-  
-  p{
-    color: rgba(141, 143, 154, 1)!important;
-    font-weight: 400!important;
-    font-size: 24px!important;
-    line-height: 38.4px!important;
-  }
+
+p {
+  color: rgba(141, 143, 154, 1) !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+  line-height: 38.4px !important;
+  cursor: pointer;
+}
 `
 
 class OutOfStock extends Component {

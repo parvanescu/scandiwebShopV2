@@ -6,6 +6,7 @@ import {mapCurrencyToSymbol} from "../../../../../../lib/utils";
 import OutOfStock from "./OutOfStock";
 import BuyNow from "../../../../../core/ui/BuyNow";
 import {withRouter} from "react-router-dom";
+import {addItemToCart} from "../../../../../core/contexts/store/actions";
 
 
 const ProductCardWrapper = styled.div`
@@ -15,7 +16,7 @@ const ProductCardWrapper = styled.div`
   &:hover{
     box-shadow: 0 4px 35px rgba(168,172,176,0.19);
     .buy_icon{
-      display: flex;
+      ${props => props.displayBuyNow && css`display: flex`};
     }
   }
   
@@ -61,10 +62,6 @@ const ProductValue = styled.p`
 
 
 class ProductCard extends Component{
-    constructor(props) {
-        super(props);
-
-    }
 
     redirectTo(productId){
         this.props.history.push(`/product/${productId}`);
@@ -74,10 +71,15 @@ class ProductCard extends Component{
     render() {
         return (
             <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL} onClick={()=>this.redirectTo(this.props.id)}>
-                <ProductCardWrapper>
+                <ProductCardWrapper className="product_card_wrapper" displayBuyNow={this.props.inStock} >
                     <ProductImageWrapper>
                         <ProductImage src={this.props.image}/>
-                        <BuyNow/>
+                        <BuyNow onClickCallback={(e)=>{
+                            e.stopPropagation();
+                            if(this.props.inStock){
+                                this.props.addItemToCart(this.props.product)}
+                            }
+                        }/>
                     </ProductImageWrapper>
                     <ProductName>{this.props.name}</ProductName>
                     <ProductValue>{mapCurrencyToSymbol(this.props.value.currency)+this.props.value.amount}</ProductValue>
@@ -92,4 +94,8 @@ const mapStateToProps = state => (
     {currency: getCurrencyState(state)}
 )
 
-export default withRouter(connect(mapStateToProps)(ProductCard));
+const mapDispatchToProps = dispatch => ({
+    addItemToCart: (item) => dispatch(addItemToCart(item))
+})
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(ProductCard));

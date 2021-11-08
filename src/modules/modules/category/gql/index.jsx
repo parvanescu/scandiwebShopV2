@@ -12,6 +12,19 @@ query getCategoryBYTitle($input: CategoryInput!){
                 amount
                 currency
             }
+            attributes{
+                id
+                items{
+                    displayValue
+                    id
+                    value
+                }
+                name
+                type
+            }
+            brand
+            category
+            description
         }
     }
 }

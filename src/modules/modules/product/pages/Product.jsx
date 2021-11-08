@@ -4,6 +4,7 @@ import {getItemById} from "../gql";
 import {ProductWrapperUI} from "../../../core/ui/product/ProductWrapperUI";
 import ProductScrollGallery from "../modules/ProductScrollGallery";
 import ProductInfo from "../modules/ProductInfo";
+import Loader from "../../../core/components/Loader";
 
 class Product extends Component {
 
@@ -12,12 +13,24 @@ class Product extends Component {
         this.state = {
             product: null,
             selectedImage: null,
+            checkProduct: false,
         }
 
     }
 
+    componentDidMount() {
+        this.setState(prevState => ({...prevState,checkProduct: true}))
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.data.product !== this.props.data.product) {
+            this.setState(prevState => ({
+                ...prevState,
+                product: this.props.data.product,
+                selectedImage: this.props.data.product.gallery[0]
+            }))
+        }
+        if(prevState.checkProduct !== this.state.checkProduct && this.state.product === null && this.props.data.product){
             this.setState(prevState => ({
                 ...prevState,
                 product: this.props.data.product,
@@ -31,7 +44,7 @@ class Product extends Component {
         return (
             <ProductWrapperUI
             >
-                {this.state.product && (
+                {this.state.product?(
                     <>
                         <ProductScrollGallery images={this.state.product.gallery}
                                               setImage={(image) => this.setState(prevState => {
@@ -41,7 +54,7 @@ class Product extends Component {
                                               })})}/>
                         <ProductInfo src={this.state.selectedImage} product={this.state.product}/>
                     </>
-                )}
+                ):<Loader/>}
 
             </ProductWrapperUI>
 

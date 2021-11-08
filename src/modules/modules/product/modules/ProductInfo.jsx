@@ -11,6 +11,8 @@ import PriceDisplay from "./components/PriceDisplay";
 import CartButton from "./components/CartButton";
 import {ProductDescription} from "../../../core/ui/product/ProductDescription";
 import HTMLReactParser from "html-react-parser";
+import {addItemToCart} from "../../../core/contexts/store/actions";
+import {connect} from "react-redux";
 
 
 class ProductInfo extends Component {
@@ -18,8 +20,14 @@ class ProductInfo extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props);
-        this.state = {}
+        this.state = {
+            ...props.product
+        }
+
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+
     }
 
     render() {
@@ -33,7 +41,7 @@ class ProductInfo extends Component {
                     </TitleWrapper>
                     <OptionsChoice attributes={this.props.product.attributes}/>
                     <PriceDisplay prices={this.props.product.prices}/>
-                    <CartButton product={this.props.product}/>
+                    <CartButton product={this.props.product} clickedCallback={()=>this.props.addItemToCart(this.props.product)}/>
                     <ProductDescription>{HTMLReactParser(this.props.product.description)}</ProductDescription>
                 </ProductInteraction>
             </ProductInfoWrapper>
@@ -41,4 +49,8 @@ class ProductInfo extends Component {
     }
 }
 
-export default ProductInfo;
+const mapDispatchToProps = dispatch => ({
+    addItemToCart: (item) => dispatch(addItemToCart(item))
+})
+
+export default connect(null,mapDispatchToProps)(ProductInfo);

@@ -3,13 +3,15 @@ import styled, {css} from "styled-components";
 export const NavbarUI = styled.div`
   height: 80px;
   display: flex;
-  width: calc(100vw - 2 * 100vw *0.069375 + 0.2px);
+  width: calc(100vw - 200px);
   justify-content: space-between;
   position: absolute;
-  z-index: 100;
+  z-index: 999999999;
+  background-color: white;
 `
 
 export const NavigationCategories = styled.div`
+  z-index: 500;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -30,7 +32,8 @@ export const NavigationActions = styled.div`
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
-  margin-top: 23px
+  margin-top: 23px;
+  z-index: 500;
 `
 
 

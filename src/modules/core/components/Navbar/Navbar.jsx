@@ -4,21 +4,27 @@ import {graphql} from "@apollo/client/react/hoc";
 import {NavbarUI, NavigationActions, NavigationCategories, NavigationCategory} from "../../ui/navbar/NavbarUI";
 import logo from "../../../../assets/icons/logo.png"
 import cart from "../../../../assets/icons/empty_cart_grey.png"
-import arrowDown from "../../../../assets/icons/arrow-down.png"
 import {
-    ActionLogo,
+    ActionLogo, CartActionLogoWrapper, CartItemsCounter,
     CurrencyActionLogo,
-    CurrencyActionLogoWrapper,
+    CurrencyActionLogoWrapper, LogoHorizontalAlign,
     LogoImg,
-    LogoWrapper
+    LogoWrapper, VerticalAlign
 } from "../LogoImg";
 import {connect} from "react-redux";
 import {setCategories, setCurrency, setError, setLoading} from "../../contexts/store/actions";
-import {getCategoriesState, getCurrencyState, getErrorState, getLoadingState} from "../../contexts/store/selectors";
+import {
+    getCartItems,
+    getCategoriesState,
+    getCurrencyState,
+    getErrorState,
+    getLoadingState
+} from "../../contexts/store/selectors";
 import {getCategoriesQuery, getCurrenciesQuery} from "./gql";
 import {mapCurrencyToSymbol} from "../../../../lib/utils";
 import CurrencyExchange from "../CurrencyExchange";
 import {withRouter} from "react-router-dom"
+import CartDropdown from "../CartDropdown";
 
 
 class Navbar extends Component {
@@ -31,7 +37,9 @@ class Navbar extends Component {
             selected: 0,
             currencies: null,
             loading: getCategoryQuery.loading && getCurrenciesQuery.loading,
-            error: getCategoryQuery.error || getCurrenciesQuery.error
+            error: getCategoryQuery.error || getCurrenciesQuery.error,
+            cartToggled: false,
+            node: props.node
         }
         this.props.changeLoading(this.state.loading);
         this.props.changeError(this.state.error || null);
@@ -98,7 +106,31 @@ class Navbar extends Component {
                 this.props.changeError(this.state.error)
             }
         }
+
+        if(prevProps.node !== this.props.node){
+            this.setState(prevState=>({...prevState,node: this.props.node}))
+        }
     }
+
+    handleClick =() => {
+        if (!this.state.showModal) {
+            document.addEventListener("click", this.handleOutsideClick, false);
+        } else {
+            document.removeEventListener("click", this.handleOutsideClick, false);
+        }
+        this.setState(prevState => ({
+            cartToggled: !prevState.cartToggled
+        }));
+        if(this.state.node)
+            this.props.changeBackground();
+
+    };
+
+    handleOutsideClick = e => {
+        if(this.state.node)
+        if (!this.state.node.contains(e.target)) this.handleClick();
+    };
+
 
     render() {
         const {loading, categories} = this.state
@@ -122,17 +154,26 @@ class Navbar extends Component {
                     }
                 </NavigationCategories>
                 <LogoWrapper>
-                    <LogoImg alt="logo" src={logo}/>
+                    <LogoHorizontalAlign>
+                        <LogoImg alt="logo" src={logo}/>
+                    </LogoHorizontalAlign>
                 </LogoWrapper>
                 <NavigationActions>
                     <CurrencyActionLogoWrapper>
-                        <CurrencyActionLogo>
-                            {this.props.currency?.symbol}
-                        </CurrencyActionLogo>
+                        <VerticalAlign>
+                            <CurrencyActionLogo>
+                                {this.props.currency?.symbol}
+                            </CurrencyActionLogo>
+                        </VerticalAlign>
                         <CurrencyExchange
                             currencies={this.state.currencies}
                         />
-                        <ActionLogo src={cart}/>
+                        <CartActionLogoWrapper onClick={()=>this.handleClick()}>
+                            {this.props.cartItems.length !== 0 &&
+                            <CartItemsCounter><p>{this.props.cartItems.length}</p></CartItemsCounter>}
+                            <ActionLogo src={cart} mL={22} pT={11}/>
+                            {this.state.cartToggled && <CartDropdown/>}
+                        </CartActionLogoWrapper>
                     </CurrencyActionLogoWrapper>
                 </NavigationActions>
             </NavbarUI>
@@ -146,7 +187,8 @@ const mapStateToProps = state => {
         loading: getLoadingState(state),
         categories: getCategoriesState(state),
         error: getErrorState(state),
-        currency: getCurrencyState(state)
+        currency: getCurrencyState(state),
+        cartItems: getCartItems(state)
     }
 }
 
