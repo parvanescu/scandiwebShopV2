@@ -8,18 +8,11 @@ import {
     CartDropdownTotalContainer, CartMoreItems
 } from "../ui/cart/CartDropdown";
 import {getCartItems, getCurrencyState} from "../contexts/store/selectors";
-import {updateItemQuantity} from "../contexts/store/actions";
 import {connect} from "react-redux";
 import CartDropdownItem from "./CartDropdownItem";
 import {withRouter} from "react-router-dom";
 
 class CartDropdown extends Component {
-
-    constructor(props) {
-        super(props);
-        console.log(props)
-    }
-
 
     itemReducer(prevItem,currentItem){
         return prevItem + currentItem.prices.filter(price => price.currency === this.props.currency.label)[0].amount;
@@ -37,8 +30,8 @@ class CartDropdown extends Component {
                     <p className="description">{`${this.props.items.length} ${this.props.items.length !== 1 ? "items" : "item"}`}</p>
                 </CartDropdownTitleWrapper>
                 <CartDropdownItemsContainer>
-                    {this.props.items.map(item => {
-                        return <CartDropdownItem product={item}/>
+                    {this.props.items.map((item,idx) => {
+                        return <CartDropdownItem itemIndex={idx} key={`cart-item-${idx}`} product={item}/>
                     })}
                     {this.props.items.length>2 && <CartMoreItems><p>More items</p></CartMoreItems>}
                 </CartDropdownItemsContainer>
@@ -66,10 +59,4 @@ const mapStateToProps = (state) => ({
     currency: getCurrencyState(state)
 })
 
-const mapDispatchToProps = (dispatch) => ({
-    updateItemQuantity: (id, quantity) => {
-        dispatch(updateItemQuantity(id, quantity))
-    }
-})
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CartDropdown));
+export default withRouter(connect(mapStateToProps)(CartDropdown));

@@ -3,5 +3,5 @@ export const getSelectedCategory = store => store.categories.categories.filter(c
 export const getLoadingState = store => store.globalState.loading;
 export const getErrorState = store => store.globalState.error;
 export const getCurrencyState = store => store.globalState.currency;
-export const getItemQuantityById = (store,id)=> store.cart.items.filter(item => id === item.id)[0]?.quantity;
+export const getItemQuantityById = (store,id,itemIndex)=> store.cart.items.filter((item,index) => id === item.id && index===itemIndex)[0]?.quantity;
 export const getCartItems = (store) => store.cart.items;

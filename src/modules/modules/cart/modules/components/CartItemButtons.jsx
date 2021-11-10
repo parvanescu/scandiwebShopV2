@@ -16,16 +16,16 @@ class CartItemButtons extends Component {
                         width={43}
                         height={43}
                         isPlus={true}
-                        onClickCallback={() => this.props.changeQuantity(product.id, this.props.getQuantity(product.id) + 1)}/>
+                        onClickCallback={() => this.props.changeQuantity(product.id,this.props.itemIdx, this.props.getQuantity(product.id,this.props.itemIdx) + 1)}/>
                 </CartButton>
                 <QuantityDisplay>
-                    {this.props.getQuantity(this.props.product.id)}
+                    {this.props.getQuantity(this.props.product.id,this.props.itemIdx)}
                 </QuantityDisplay>
                 <CartButton width={45} height={45}>
                     <PlusMinusIcon
                         width={43}
                         height={43}
-                        onClickCallback={() => this.props.changeQuantity(product.id, this.props.getQuantity(product.id) - 1)}/>
+                        onClickCallback={() => this.props.changeQuantity(product.id,this.props.itemIdx, this.props.getQuantity(product.id,this.props.itemIdx) - 1)}/>
                 </CartButton>
             </ButtonsWrapper>
         );
@@ -33,11 +33,11 @@ class CartItemButtons extends Component {
 }
 
 const mapStateToProps = state => ({
-    getQuantity: (id) => getItemQuantityById(state, id)
+    getQuantity: (id,itemIdx) => getItemQuantityById(state, id,itemIdx)
 })
 
 const mapDispatchToProps = dispatch => ({
-    changeQuantity: (id, quantity) => dispatch(updateItemQuantity(id, quantity))
+    changeQuantity: (id,itemIndex, quantity) => dispatch(updateItemQuantity(id,itemIndex, quantity))
 })
 
 

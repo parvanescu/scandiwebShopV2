@@ -135,6 +135,10 @@ class Navbar extends Component {
             if (!this.state.node.contains(e.target)) this.handleClick();
     };
 
+    itemSizeReducer(prevItem,currentItem){
+        return prevItem + currentItem.quantity
+    }
+
 
     render() {
         const {loading, categories} = this.state
@@ -174,7 +178,7 @@ class Navbar extends Component {
                         />
                         <CartActionLogoWrapper onClick={() => this.handleClick()}>
                             {this.props.cartItems.length !== 0 &&
-                            <CartItemsCounter><p>{this.props.cartItems.length}</p></CartItemsCounter>}
+                            <CartItemsCounter><p>{this.props.cartItems.reduce((prevItem,currentItem)=>this.itemSizeReducer(prevItem,currentItem),0)}</p></CartItemsCounter>}
                             <ActionLogo src={cart} mL={22} pT={11}/>
                             {this.state.cartToggled && <CartDropdown/>}
                         </CartActionLogoWrapper>

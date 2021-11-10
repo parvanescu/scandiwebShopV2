@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import styled from "styled-components";
-import { getCurrencyState, getItemQuantityById} from "../contexts/store/selectors";
+import {getCurrencyState, getItemQuantityById} from "../contexts/store/selectors";
 import {connect} from "react-redux";
 import PlusMinusIcon from "../ui/icons/PlusMinusIcon";
-import { CartButton} from "../ui/cart/CartItem";
-import {updateItemQuantity} from "../contexts/store/actions";
+import {CartButton} from "../ui/cart/CartItem";
+import {updateItemQuantity, updateOptionChoice} from "../contexts/store/actions";
 
 const MainContainer = styled.div`
   display: flex;
@@ -42,8 +42,8 @@ const InfoTextWrapper = styled.div`
   p {
     font-family: Raleway, sans-serif !important;
     font-size: 16px !important;
-    line-height: 160%;
-    margin: 0!important;
+    line-height: 160%!important;
+    margin: 0 !important;
   }
 
   .title {
@@ -57,6 +57,19 @@ const InfoTextWrapper = styled.div`
 
 const InfoOptionsWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  justify-content: flex-start;
+  max-height: 30px;
+  overflow: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`
+
+const InfoOptionsContainer = styled.div`
+  display: flex;
   flex-direction: row;
   column-gap: 8px;
   justify-content: flex-start;
@@ -66,23 +79,35 @@ const InfoOptionsWrapper = styled.div`
 const InfoQuantityWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 30px;
+  row-gap: 32px;
   text-align: center;
   
-  p{
-    margin:0!important;
+  .quantity{
+    font-weight: 500!important;
+    font-family: Raleway,sans-serif!important;
+    font-size: 16px;
+    line-height: 25.6px;
+  }
+  
+  
+  p {
+    margin: 0 !important;
   }
 `
 
 class CartDropdownItem extends Component {
 
-    handleChangeProduct(isPlus){
-        let newQuantity = this.props.itemQuantity(this.props.product.id)
-        if(isPlus)
-            newQuantity+=1
+    handleChangeProduct(isPlus) {
+        let newQuantity = this.props.itemQuantity(this.props.product.id,this.props.itemIndex)
+        if (isPlus)
+            newQuantity += 1
         else
-            newQuantity-=1
-        this.props.updateItemQuantity(this.props.product.id,newQuantity)
+            newQuantity -= 1
+        this.props.updateItemQuantity(this.props.product.id,this.props.itemIndex, newQuantity)
+    }
+
+    handleOptionChoice(id,attrIdx,newOptionId){
+        this.props.updateOptionChoice(id,this.props.itemIndex,attrIdx,newOptionId)
     }
 
 
@@ -93,23 +118,38 @@ class CartDropdownItem extends Component {
                     <InfoWrapper>
                         <InfoTextWrapper>
                             <p className="title">{this.props.product.brand}</p>
-                            <p className="title">{this.props.product.name}</p>
+                            <p className="title">{this.props.product.name.substring(0,12)}</p>
                             <p className="price">
                                 {this.props.currency.symbol}
                                 {this.props.product.prices.filter(price => price.currency === this.props.currency.label)[0].amount}
                             </p>
                         </InfoTextWrapper>
                         <InfoOptionsWrapper>
-
+                            {this.props.product.attributes.map((attribute, aIdx) => {
+                                return <InfoOptionsContainer key={`option-container-${aIdx}`}>
+                                    {attribute.items.map((option, oIdx) => {
+                                        return <CartButton
+                                            key={`option-button-${aIdx}-${oIdx}`}
+                                            width={24} height={24} isSwatch={attribute.type === "swatch"}
+                                            color={option.value}
+                                            isOption
+                                            selected={option.selected}
+                                            onClick={()=>this.handleOptionChoice(this.props.product.id,aIdx,option.id)}
+                                        >{attribute.type !== "swatch" && <p>{option.value}</p>}</CartButton>
+                                    })}
+                                </InfoOptionsContainer>
+                            })}
                         </InfoOptionsWrapper>
                     </InfoWrapper>
                     <InfoQuantityWrapper>
                         <CartButton width={24} height={24}>
-                            <PlusMinusIcon isPlus width={22} height={22} onClickCallback={()=>this.handleChangeProduct(true)}/>
+                            <PlusMinusIcon isPlus width={22} height={22}
+                                           onClickCallback={() => this.handleChangeProduct(true)}/>
                         </CartButton>
-                        <p>{this.props.itemQuantity(this.props.product.id)}</p>
+                        <p className="quantity">{this.props.itemQuantity(this.props.product.id,this.props.itemIndex)}</p>
                         <CartButton width={24} height={24}>
-                            <PlusMinusIcon width={22} height={22} onClickCallback={()=>this.handleChangeProduct(false)}/>
+                            <PlusMinusIcon width={22} height={22}
+                                           onClickCallback={() => this.handleChangeProduct(false)}/>
                         </CartButton>
                     </InfoQuantityWrapper>
                 </InfoContainer>
@@ -121,11 +161,12 @@ class CartDropdownItem extends Component {
 
 const mapStateToProps = (state) => ({
     currency: getCurrencyState(state),
-    itemQuantity: (id)=>getItemQuantityById(state,id)
+    itemQuantity: (id,itemIndex) => getItemQuantityById(state, id,itemIndex)
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    updateItemQuantity: (id,quantity)=>dispatch(updateItemQuantity(id,quantity))
+    updateItemQuantity: (id,itemIndex, quantity) => dispatch(updateItemQuantity(id,itemIndex, quantity)),
+    updateOptionChoice: (id,itemIndex,attrIdx,optionId) => dispatch(updateOptionChoice(id,itemIndex,attrIdx,optionId))
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(CartDropdownItem);
+export default connect(mapStateToProps, mapDispatchToProps)(CartDropdownItem);

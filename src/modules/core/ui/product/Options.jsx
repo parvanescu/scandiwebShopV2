@@ -38,15 +38,32 @@ export const Option = styled.div`
   justify-content: center;
   text-align: center;
   overflow: hidden;
+  cursor: pointer;
   ${props=>props.backgroundColor && css`
     background-color: ${props.backgroundColor};
   `}
-  
+
   p{
     font-family: Source Sans Pro,sans-serif!important;
     font-weight: 400!important;
     font-size: 16px!important;
     line-height: 18px!important;
     color: rgba(29,31,34,1)!important;
+    cursor: pointer;
   }
+  
+  ${props=>props.selected && props.backgroundColor && css`
+    opacity: 0.3;
+    border: 3px solid rgba(29, 31, 34, 1);
+  `}
+
+  ${props=>props.selected && !props.backgroundColor && css`
+    background-color: rgba(29, 31, 34, 1);
+    p{
+      color: rgba(255, 255, 255, 1)!important;
+    }
+  `}
+  
+  
+  
 `

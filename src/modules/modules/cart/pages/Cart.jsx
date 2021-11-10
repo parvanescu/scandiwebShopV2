@@ -22,11 +22,11 @@ class Cart extends Component {
         return <div>
             <CartHeader>CART</CartHeader>
             <CartItemsContainer>
-                {this.state.items.map(item => {
+                {this.state.items.map((item,idx) => {
                     return (
                         <>
-                            <CartDivider/>
-                            <CartItem product={item}/>
+                            <CartDivider key={`cart-divider-unique-${idx}`}/>
+                            <CartItem key={`cart-item-container-unique-${idx}`} itemIdx={idx} product={item}/>
                         </>
                     )
                 })}

@@ -12,9 +12,15 @@ import {connect} from "react-redux";
 import {Option} from "../../../core/ui/product/Options";
 import CartItemButtons from "./components/CartItemButtons";
 import CartGallery from "./components/CartGallery";
+import {updateOptionChoice} from "../../../core/contexts/store/actions";
 
 
 class CartItem extends Component {
+
+    handleOptionChange(id,attrIdx,optionId){
+        this.props.updateOptionChoice(id,this.props.itemIdx,attrIdx,optionId)
+    }
+
     render() {
         return (
             <CartItemWrapper>
@@ -29,11 +35,14 @@ class CartItem extends Component {
                     </CartItemPrice>
                     <CartOptionsContainer>
                         {this.props.product.attributes.map((attrList, attrIdx) => {
-                            return <AttributeGroup>
+                            return <AttributeGroup key={`attribute-group-${attrIdx}`}>
                                 {
                                     attrList.items.map((attribute, idx) => (
                                         <Option key={`cart-option-${attrIdx}-${idx}`}
-                                                backgroundColor={attrList.type === "swatch" ? attribute.value : null}>
+                                                backgroundColor={attrList.type === "swatch" ? attribute.value : null}
+                                                selected={attribute.selected}
+                                                onClick={()=>this.handleOptionChange(this.props.product.id,attrIdx,attribute.id)}
+                                        >
                                             {attrList.type !== "swatch" && <p>{attribute.displayValue}</p>}
                                         </Option>
                                     ))
@@ -43,7 +52,7 @@ class CartItem extends Component {
                     </CartOptionsContainer>
                 </CartItemInfo>
                 <CartItemInteraction>
-                    <CartItemButtons product={this.props.product}/>
+                    <CartItemButtons product={this.props.product} itemIdx={this.props.itemIdx}/>
                     <CartGallery images={this.props.product.gallery}/>
                 </CartItemInteraction>
             </CartItemWrapper>
@@ -55,4 +64,8 @@ const mapStateToProps = state => ({
     currency: getCurrencyState(state)
 })
 
-export default connect(mapStateToProps)(CartItem);
+const mapDispatchToProps = dispatch => ({
+    updateOptionChoice: (id,itemIndex,attrIdx,optionId) => dispatch(updateOptionChoice(id,itemIndex,attrIdx,optionId))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(CartItem);
