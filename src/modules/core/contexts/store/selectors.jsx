@@ -5,3 +5,4 @@ export const getErrorState = store => store.globalState.error;
 export const getCurrencyState = store => store.globalState.currency;
 export const getItemQuantityById = (store,id,itemIndex)=> store.cart.items.filter((item,index) => id === item.id && index===itemIndex)[0]?.quantity;
 export const getCartItems = (store) => store.cart.items;
+export const getToastMessages = (store) => store.toast.messages;

@@ -6,7 +6,7 @@ import {mapCurrencyToSymbol} from "../../../../../../lib/utils";
 import OutOfStock from "./OutOfStock";
 import BuyNow from "../../../../../core/ui/BuyNow";
 import {withRouter} from "react-router-dom";
-import {addItemToCart} from "../../../../../core/contexts/store/actions";
+import {addItemToCart, addToastItem} from "../../../../../core/contexts/store/actions";
 
 
 const ProductCardWrapper = styled.div`
@@ -89,6 +89,7 @@ class ProductCard extends Component {
                                     })))
                                 }
                                 this.props.addItemToCart(productForCart)
+                                this.props.addMessageToToast("Success","Item added successfully to cart","success",3000)
                             }
                         }
                         }/>
@@ -107,7 +108,8 @@ const mapStateToProps = state => (
 )
 
 const mapDispatchToProps = dispatch => ({
-    addItemToCart: (item) => dispatch(addItemToCart(item))
+    addItemToCart: (item) => dispatch(addItemToCart(item)),
+    addMessageToToast: (title,text,type,time)=> dispatch(addToastItem(title,text,type,time))
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCard));

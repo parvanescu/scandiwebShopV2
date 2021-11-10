@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {getErrorState, getLoadingState} from "../core/contexts/store/selectors";
 import MessageOverlay from "../core/components/MessageOverlay";
 import {CartBackground} from "../core/ui/CartBackground";
+import Toast from "../core/components/toast/Toast";
 
 
 class Layout extends Component {
@@ -41,19 +42,23 @@ class Layout extends Component {
     render() {
 
         return (
-            <div style={{width: "100%", position: "relative"}}>
-                {this.state.showBackground && <CartBackground/>}
-                <CenteredContent ref={node => {
-                    this.node = node;
-                }}>
-                    {this.state.loading && <MessageOverlay/>}
-                    {this.state.error && <MessageOverlay message={this.state.error.message}/>}
-                    <Navbar changeBackground={() => this.handleChangeBackground()} node={this.node}/>
-                    <PageContent>
-                        {this.props.children}
-                    </PageContent>
-                </CenteredContent>
-            </div>
+            <>
+                <div style={{width: "100%", position: "relative"}}>
+                    {this.state.showBackground && <CartBackground/>}
+                    <CenteredContent ref={node => {
+                        this.node = node;
+                    }}>
+                        {this.state.loading && <MessageOverlay/>}
+                        {this.state.error && <MessageOverlay message={this.state.error.message}/>}
+                        <Navbar changeBackground={() => this.handleChangeBackground()} node={this.node}/>
+                        <PageContent>
+                            {this.props.children}
+                        </PageContent>
+                    </CenteredContent>
+                </div>
+                <Toast/>
+            </>
+
         )
     }
 }

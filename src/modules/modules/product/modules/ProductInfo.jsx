@@ -11,7 +11,7 @@ import PriceDisplay from "./components/PriceDisplay";
 import CartButton from "./components/CartButton";
 import {ProductDescription} from "../../../core/ui/product/ProductDescription";
 import HTMLReactParser from "html-react-parser";
-import {addItemToCart} from "../../../core/contexts/store/actions";
+import {addItemToCart, addToastItem} from "../../../core/contexts/store/actions";
 import {connect} from "react-redux";
 
 
@@ -30,10 +30,16 @@ class ProductInfo extends Component {
     handleAddToCart() {
         let selectedOptions = Array(this.state.product.attributes.length).fill(false);
         this.state.product.attributes.forEach((attr,idx)=>attr.items.forEach(item=>selectedOptions[idx]=selectedOptions[idx]||item.selected))
-        if(!selectedOptions.includes(false) && this.state.product.inStock)
-        this.props.addItemToCart(this.state.product)
-        //todo: add message to toast
-        else console.log("can't add")
+        if(!selectedOptions.includes(false) && this.state.product.inStock){
+            this.props.addItemToCart(this.state.product)
+            this.props.addMessageToToast("Success","Item added successfully to cart","success",3000)
+        }
+        else {
+            if(!this.state.product.inStock)
+                this.props.addMessageToToast("Error adding item to cart","The item is not in stock","error",3000)
+            else if(selectedOptions.includes(false))
+                this.props.addMessageToToast("Error adding item to cart" , "You must select all options before adding it to cart","error", 5000)
+        }
     }
 
     handleChangeOption(attrIdx, optionId) {
@@ -75,7 +81,8 @@ class ProductInfo extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addItemToCart: (item) => dispatch(addItemToCart(item))
+    addItemToCart: (item) => dispatch(addItemToCart(item)),
+    addMessageToToast: (title,text,type,time) => dispatch(addToastItem(title,text,type,time))
 })
 
 export default connect(null, mapDispatchToProps)(ProductInfo);

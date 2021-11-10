@@ -1,6 +1,6 @@
 import {
-    ADD_ITEM,
-    DELETE_ITEM,
+    ADD_ITEM, ADD_TOAST_ITEM,
+    DELETE_ITEM, DELETE_TOAST_ITEM,
     SET_CATEGORIES,
     SET_CURRENCY,
     SET_ERROR,
@@ -68,5 +68,22 @@ export const deleteItem = (id) => ({
     type: DELETE_ITEM,
     payload: {
         id
+    }
+})
+
+export const addToastItem = (title,text,type,time) => ({
+    type: ADD_TOAST_ITEM,
+    payload: {
+        title,
+        text,
+        type,
+        time
+    }
+})
+
+export const deleteToastItem = (index) => ({
+    type: DELETE_TOAST_ITEM,
+    payload: {
+        index
     }
 })
