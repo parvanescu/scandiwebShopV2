@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 export const CartItemWrapper = styled.div`
   display: flex;
@@ -17,27 +17,28 @@ export const CartItemInfoTextGroup = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 16px;
-  p{
-    font-size: 30px!important;
-    line-height: 27px!important;
+
+  p {
+    font-size: 30px !important;
+    line-height: 27px !important;
     margin: 0;
   }
 `
 
 export const CartItemHeader = styled.p`
-  font-weight: 600!important;
-  
+  font-weight: 600 !important;
+
 `
 
 export const CartItemName = styled.p`
-  font-weight: 400!important;
+  font-weight: 400 !important;
 `
 
 export const CartItemPrice = styled.p`
-  font-weight: 700!important;
-  font-size: 24px!important;
-  line-height: 18px!important;
-  color: rgba(29, 31, 34, 1)!important;
+  font-weight: 700 !important;
+  font-size: 24px !important;
+  line-height: 18px !important;
+  color: rgba(29, 31, 34, 1) !important;
   margin: 0.875rem 0;
 `
 
@@ -66,9 +67,9 @@ export const ButtonsWrapper = styled.div`
 `
 
 export const QuantityDisplay = styled.p`
-  font-weight: 500!important;
-  font-size: 24px!important;
-  line-height: 38.4px!important;
+  font-weight: 500 !important;
+  font-size: 24px !important;
+  line-height: 38.4px !important;
   text-align: center;
   margin: 0;
 `
@@ -105,7 +106,8 @@ export const CartGalleryIcon = styled.img`
   padding-left: 9px;
   width: 6px;
   height: 12px;
-  &:hover{
+
+  &:hover {
     box-shadow: 2px 2px 5px rgba(168, 172, 176, 1);
   }
 `
@@ -116,13 +118,37 @@ export const CartButton = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 43px;
-  height: 43px;
   border: 1px solid #1D1F22;
-  p{
+  cursor: pointer;
+  
+  ${props => props.isOption ? css`
+    min-width: ${props => props.width - 2}px;
+    min-height: ${props => props.width - 2}px;
+  ` : css`
+    width: ${props => props.width - 2}px;
+    height: ${props => props.width - 2}px;
+  `}
+
+  ${props => props.selected && !props.isSwatch && css`
+    background-color: rgba(29, 31, 34, 1);
+    p {
+      color: rgba(255, 255, 255, 1) !important;
+    }
+  `}
+
+  p {
     margin: 0;
-    font-size: 18px!important;
-    line-height: 18px;
+    font-size: 18px !important;
+    line-height: 18px!important;
   }
+
+  ${props => props.isSwatch && css`
+    background-color: ${props.color};
+  `}
+
+  ${props => props.selected && props.isSwatch && css`
+    opacity: 0.3;
+    border: 1px solid rgba(94, 206, 123, 1)!important;
+  `}
 `
 

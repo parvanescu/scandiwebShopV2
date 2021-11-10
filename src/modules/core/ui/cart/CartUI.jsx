@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const CartWrapper = styled.div`
   padding-top: 80px;
 padding-bottom: 54px;
+  min-height: 820px;
 `
 
 export const CartHeader = styled.p`

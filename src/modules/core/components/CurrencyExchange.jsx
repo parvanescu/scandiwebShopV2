@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {ActionLogo, LogoWrapper} from "./LogoImg";
+import {ActionLogo} from "./LogoImg";
 import arrowDown from "../../../assets/icons/arrow-down.png";
 import arrowUp from "../../../assets/icons/arrow-up.png"
 import {getCurrencyState} from "../contexts/store/selectors";

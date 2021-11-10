@@ -107,12 +107,16 @@ class Navbar extends Component {
             }
         }
 
-        if(prevProps.node !== this.props.node){
-            this.setState(prevState=>({...prevState,node: this.props.node}))
+        if (prevProps.node !== this.props.node) {
+            this.setState(prevState => ({...prevState, node: this.props.node}))
         }
     }
 
-    handleClick =() => {
+    componentWillUnmount() {
+        document.removeEventListener("click", this.handleOutsideClick, false);
+    }
+
+    handleClick = () => {
         if (!this.state.showModal) {
             document.addEventListener("click", this.handleOutsideClick, false);
         } else {
@@ -121,15 +125,19 @@ class Navbar extends Component {
         this.setState(prevState => ({
             cartToggled: !prevState.cartToggled
         }));
-        if(this.state.node)
+        if (this.state.node)
             this.props.changeBackground();
 
     };
 
     handleOutsideClick = e => {
-        if(this.state.node)
-        if (!this.state.node.contains(e.target)) this.handleClick();
+        if (this.state.node)
+            if (!this.state.node.contains(e.target)) this.handleClick();
     };
+
+    itemSizeReducer(prevItem,currentItem){
+        return prevItem + currentItem.quantity
+    }
 
 
     render() {
@@ -168,9 +176,9 @@ class Navbar extends Component {
                         <CurrencyExchange
                             currencies={this.state.currencies}
                         />
-                        <CartActionLogoWrapper onClick={()=>this.handleClick()}>
+                        <CartActionLogoWrapper onClick={() => this.handleClick()}>
                             {this.props.cartItems.length !== 0 &&
-                            <CartItemsCounter><p>{this.props.cartItems.length}</p></CartItemsCounter>}
+                            <CartItemsCounter><p>{this.props.cartItems.reduce((prevItem,currentItem)=>this.itemSizeReducer(prevItem,currentItem),0)}</p></CartItemsCounter>}
                             <ActionLogo src={cart} mL={22} pT={11}/>
                             {this.state.cartToggled && <CartDropdown/>}
                         </CartActionLogoWrapper>

@@ -13,7 +13,10 @@ class OptionsChoice extends Component {
                         <OptionsLayout>
                             {attr.items.map((item, idxAttr) => (
                                 <Option key={`option-${idx}-${idxAttr}`}
-                                        backgroundColor={attr.type === "swatch" ? item.value : null}>
+                                        backgroundColor={attr.type === "swatch" ? item.value : null}
+                                        selected={item?.selected}
+                                    onClick={()=>this.props.changeOption(idx,item.id)}
+                                >
                                     {attr.type !== "swatch" && <p>{item.displayValue}</p>}
                                 </Option>
                             ))}

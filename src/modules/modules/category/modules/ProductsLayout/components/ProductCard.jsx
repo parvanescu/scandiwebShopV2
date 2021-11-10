@@ -13,17 +13,19 @@ const ProductCardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  &:hover{
-    box-shadow: 0 4px 35px rgba(168,172,176,0.19);
-    .buy_icon{
+
+  &:hover {
+    box-shadow: 0 4px 35px rgba(168, 172, 176, 0.19);
+
+    .buy_icon {
       ${props => props.displayBuyNow && css`display: flex`};
     }
   }
-  
-  p{
-    color: #1d1f22!important;
-    font-size: 18px!important;
-    line-height: 160%!important;
+
+  p {
+    color: #1d1f22 !important;
+    font-size: 18px !important;
+    line-height: 160% !important;
   }
 `
 
@@ -47,42 +49,52 @@ const ProductImageWrapper = styled.div`
 `
 
 const ProductName = styled.p`
-    margin: 0;
-    font-weight: 300;
-    text-align: left;
-    padding: 0 16px;
+  margin: 0;
+  font-weight: 300;
+  text-align: left;
+  padding: 0 16px;
 `
 
 const ProductValue = styled.p`
-    margin: 0;
-    font-weight: 600;
-    text-align: left;
-    padding: 0 16px 16px 16px;
+  margin: 0;
+  font-weight: 600;
+  text-align: left;
+  padding: 0 16px 16px 16px;
 `
 
 
-class ProductCard extends Component{
+class ProductCard extends Component {
 
-    redirectTo(productId){
+    redirectTo(e, productId) {
+        e.stopPropagation();
         this.props.history.push(`/product/${productId}`);
     }
 
 
     render() {
         return (
-            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL} onClick={()=>this.redirectTo(this.props.id)}>
-                <ProductCardWrapper className="product_card_wrapper" displayBuyNow={this.props.inStock} >
+            <ProductCardHorizontalAlign pR={this.props.pR} pL={this.props.pL}
+                                        onClick={(e) => this.redirectTo(e, this.props.id)}>
+                <ProductCardWrapper className="product_card_wrapper" displayBuyNow={this.props.inStock}>
                     <ProductImageWrapper>
                         <ProductImage src={this.props.image}/>
-                        <BuyNow onClickCallback={(e)=>{
+                        <BuyNow onClickCallback={(e) => {
                             e.stopPropagation();
-                            if(this.props.inStock){
-                                this.props.addItemToCart(this.props.product)}
+                            if (this.props.inStock) {
+                                let productForCart = {
+                                    ...this.props.product,
+                                    attributes: this.props.product.attributes.map((attr => ({
+                                        ...attr,
+                                        items: attr.items.map((item,idx) => idx===0?({...item,selected:true}):({...item, selected: false}))
+                                    })))
+                                }
+                                this.props.addItemToCart(productForCart)
                             }
+                        }
                         }/>
                     </ProductImageWrapper>
                     <ProductName>{this.props.name}</ProductName>
-                    <ProductValue>{mapCurrencyToSymbol(this.props.value.currency)+this.props.value.amount}</ProductValue>
+                    <ProductValue>{mapCurrencyToSymbol(this.props.value.currency) + this.props.value.amount}</ProductValue>
                 </ProductCardWrapper>
                 {!this.props.inStock && <OutOfStock/>}
             </ProductCardHorizontalAlign>
@@ -98,4 +110,4 @@ const mapDispatchToProps = dispatch => ({
     addItemToCart: (item) => dispatch(addItemToCart(item))
 })
 
-export default withRouter(connect(mapStateToProps,mapDispatchToProps)(ProductCard));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ProductCard));
