@@ -7,4 +7,5 @@ export const CartBackground = styled.div`
   height: 100%;
   position: absolute;
   margin-top: 80px;
+  left: 0;
 `

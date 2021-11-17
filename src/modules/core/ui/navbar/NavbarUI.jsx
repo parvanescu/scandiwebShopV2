@@ -1,14 +1,20 @@
 import styled, {css} from "styled-components";
+import {withRef} from "../../utils/logProps";
 
-export const NavbarUI = styled.div`
+
+
+const NavbarUI = styled.div`
   height: 80px;
   display: flex;
   width: calc(100vw - 200px);
   justify-content: space-between;
-  position: absolute;
+  position: fixed;
   z-index: 999999999;
   background-color: white;
+  margin: 0 100px;
 `
+
+export default withRef(NavbarUI);
 
 export const NavigationCategories = styled.div`
   z-index: 500;

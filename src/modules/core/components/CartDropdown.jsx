@@ -19,6 +19,7 @@ class CartDropdown extends Component {
     }
 
     redirectToCart(){
+        this.props.onDropdownRedirect();
         this.props.history.push(`/cart`);
     }
 

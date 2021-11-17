@@ -1,7 +1,7 @@
-import {Component} from "react";
+import {Component, createRef} from "react";
 import {compose} from "@reduxjs/toolkit";
 import {graphql} from "@apollo/client/react/hoc";
-import {NavbarUI, NavigationActions, NavigationCategories, NavigationCategory} from "../../ui/navbar/NavbarUI";
+import NavbarUI, {NavigationActions, NavigationCategories, NavigationCategory} from "../../ui/navbar/NavbarUI";
 import logo from "../../../../assets/icons/logo.png"
 import cart from "../../../../assets/icons/empty_cart_grey.png"
 import {
@@ -39,7 +39,8 @@ class Navbar extends Component {
             loading: getCategoryQuery.loading && getCurrenciesQuery.loading,
             error: getCategoryQuery.error || getCurrenciesQuery.error,
             cartToggled: false,
-            node: props.node
+            node: props.node,
+            containerRef: createRef(),
         }
         this.props.changeLoading(this.state.loading);
         this.props.changeError(this.state.error || null);
@@ -117,34 +118,42 @@ class Navbar extends Component {
     }
 
     handleClick = () => {
-        if (!this.state.showModal) {
+        if (!this.state.cartToggled) {
             document.addEventListener("click", this.handleOutsideClick, false);
         } else {
             document.removeEventListener("click", this.handleOutsideClick, false);
         }
         this.setState(prevState => ({
+            ...prevState,
             cartToggled: !prevState.cartToggled
         }));
-        if (this.state.node)
-            this.props.changeBackground();
+        this.props.changeBackground();
 
     };
 
     handleOutsideClick = e => {
-        if (this.state.node)
-            if (!this.state.node.contains(e.target)) this.handleClick();
+        console.log(this.state.containerRef.current)
+        if (this.state.containerRef.current!=null && this.state.containerRef.current.contains(e.target))
+            this.handleClick()
     };
 
-    itemSizeReducer(prevItem,currentItem){
+    itemSizeReducer(prevItem, currentItem) {
         return prevItem + currentItem.quantity
+    }
+
+    handleRedirect = () => {
+        this.setState(prevState => ({
+            ...prevState,
+            cartToggled: true
+        }));
+        this.props.changeBackground();
     }
 
 
     render() {
         const {loading, categories} = this.state
-
         return (
-            <NavbarUI>
+            <NavbarUI ref={this.state.ref}>
                 <NavigationCategories>
                     {!loading && categories &&
                     categories.map((category, idx) => (
@@ -178,9 +187,12 @@ class Navbar extends Component {
                         />
                         <CartActionLogoWrapper onClick={() => this.handleClick()}>
                             {this.props.cartItems.length !== 0 &&
-                            <CartItemsCounter><p>{this.props.cartItems.reduce((prevItem,currentItem)=>this.itemSizeReducer(prevItem,currentItem),0)}</p></CartItemsCounter>}
+                            <CartItemsCounter>
+                                <p>{this.props.cartItems.reduce((prevItem, currentItem) => this.itemSizeReducer(prevItem, currentItem), 0)}</p>
+                            </CartItemsCounter>}
                             <ActionLogo src={cart} mL={22} pT={11}/>
-                            {this.state.cartToggled && <CartDropdown/>}
+                            {this.state.cartToggled &&
+                            <CartDropdown onDropdownRedirect={() => this.handleRedirect()}/>}
                         </CartActionLogoWrapper>
                     </CurrencyActionLogoWrapper>
                 </NavigationActions>

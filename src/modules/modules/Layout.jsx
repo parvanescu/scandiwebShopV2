@@ -44,13 +44,12 @@ class Layout extends Component {
         return (
             <>
                 <div style={{width: "100%", position: "relative"}}>
-                    {this.state.showBackground && <CartBackground/>}
-                    <CenteredContent ref={node => {
-                        this.node = node;
-                    }}>
+                    <Navbar changeBackground={() => this.handleChangeBackground()}/>
+                    <CenteredContent>
+                        {this.state.showBackground && <CartBackground/>}
                         {this.state.loading && <MessageOverlay/>}
                         {this.state.error && <MessageOverlay message={this.state.error.message}/>}
-                        <Navbar changeBackground={() => this.handleChangeBackground()} node={this.node}/>
+
                         <PageContent>
                             {this.props.children}
                         </PageContent>

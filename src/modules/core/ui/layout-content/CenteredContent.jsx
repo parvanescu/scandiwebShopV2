@@ -7,6 +7,7 @@ const CenteredContent = styled.div`
   padding: 0 100px;
   display: flex;
   flex-direction: column;
+  position: relative;
   
   label,p{
     font-family: Raleway,sans-serif;

@@ -7,7 +7,6 @@ const initialState = {
 export default function toast(state=initialState,action){
     switch (action.type){
         case ADD_TOAST_ITEM: {
-            const {title,text,type,time} = action.payload
             return {
                 ...state,
                 messages: [...state.messages,action.payload]
